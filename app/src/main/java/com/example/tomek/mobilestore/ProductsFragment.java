@@ -53,7 +53,7 @@ public class ProductsFragment extends Fragment {
       /*  mRecyclerView.scrollToPosition(scrollPosition);*/
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
 
-        mAdapter = new MyProductsAdapter(mProducts);
+        mAdapter = new MyProductsAdapter(mProducts, getActivity());
 
         mRecyclerView.setAdapter(mAdapter);
 //

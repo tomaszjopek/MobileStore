@@ -114,14 +114,29 @@ public class MainActivity extends AppCompatActivity implements RecylerViewOnItem
         List<Product> books = new ArrayList<>();
         books.add(new Product(1, "CleanCode", R.drawable.book_cleancode, 51.75));
         books.add(new Product(2, "Java", R.drawable.book_javacompendium, 54.90));
-        books.add(new Product(3, "CleanCode", R.drawable.book_cleancode, 51.75));
-        books.add(new Product(4, "CleanCode", R.drawable.book_cleancode, 51.75));
-        books.add(new Product(5, "CleanCode", R.drawable.book_cleancode, 51.75));
-        books.add(new Product(6, "CleanCode", R.drawable.book_cleancode, 51.75));
+        books.add(new Product(3, "Linux", R.drawable.book_linux, 18.70));
+        books.add(new Product(4, "Spring", R.drawable.book_spring, 60.90));
+        books.add(new Product(5, "Angular", R.drawable.book_angular, 44.25));
+        books.add(new Product(6, "HTML & CSS", R.drawable.book_html, 52.90));
 
         shopDataSet.put("Ksiazki", books);
+
+        List<Product> agdrtv = new ArrayList<>();
+        agdrtv.add(new Product(1, "Żelazko", R.drawable.rtv_zelazko, 92.50));
+        agdrtv.add(new Product(2, "Sokowirówka", R.drawable.rtv_juicer, 119.00));
+
+        shopDataSet.put("AGD i RTV", agdrtv);
+
+        List<Product> electronic = new ArrayList<>();
+        electronic.add(new Product(1, "Drukarka", R.drawable.electronic_printer, 129.00));
+        electronic.add(new Product(2, "Dysk SSD", R.drawable.electronic_ssd, 349.00));
+
+        shopDataSet.put("Elektronika", electronic);
+
+        List<Product> clothes = new ArrayList<>();
+        clothes.add(new Product(1, "Garnitur", R.drawable.clothes_suit, 690.00));
+        clothes.add(new Product(2, "Koszula", R.drawable.clothes_shirt, 59.00));
+
+        shopDataSet.put("Odziez", clothes);
     }
-
-
-
 }
