@@ -5,7 +5,9 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -28,7 +30,9 @@ public class MainActivity extends AppCompatActivity implements RecylerViewOnItem
     private NavigationView mNavigationView;
     private FragmentManager mFragmentManager;
     private FragmentTransaction mFragmentTransaction;
+    private List<Product> mBasket;
     private Map<String, List<Product>> shopDataSet;
+    private ActionBar mActionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,9 +41,13 @@ public class MainActivity extends AppCompatActivity implements RecylerViewOnItem
 
         initProducts();
 
+        mBasket = new ArrayList<>();
+
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
+
+        mActionBar = getSupportActionBar();
 
         mDrawerLayout.addDrawerListener(mToggle);
         mToggle.syncState();
@@ -74,7 +82,11 @@ public class MainActivity extends AppCompatActivity implements RecylerViewOnItem
             }
         });
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        mActionBar.setDisplayHomeAsUpEnabled(true);
+        mActionBar.setDisplayShowCustomEnabled(true);
+        mActionBar.setCustomView(R.layout.actionbar_price);
+
+        TextView price = (TextView) mActionBar.getCustomView().findViewById(R.id.menu_price);
 
     }
 
@@ -82,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements RecylerViewOnItem
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.menu_basket, menu);
+
         return true;
     }
 
@@ -90,7 +103,18 @@ public class MainActivity extends AppCompatActivity implements RecylerViewOnItem
         if(mToggle.onOptionsItemSelected(item)) {
             return true;
         }
-        return super.onOptionsItemSelected(item);
+        else if(item.getItemId() == R.id.menu_basket) {
+            mFragmentManager = getFragmentManager();
+            mFragmentTransaction = mFragmentManager.beginTransaction();
+            ProductsFragment productsFragment = new ProductsFragment();
+            productsFragment.setmProducts(mBasket);
+
+            mFragmentTransaction.replace(R.id.container, productsFragment);
+            mFragmentTransaction.addToBackStack("BASKET");
+            mFragmentTransaction.commit();
+        }
+
+        return true;
     }
 
     @Override
@@ -106,6 +130,10 @@ public class MainActivity extends AppCompatActivity implements RecylerViewOnItem
         mFragmentTransaction.addToBackStack("FRAGMENT");
         mFragmentTransaction.commit();
 
+    }
+
+    public void addToBasket(Product product) {
+        mBasket.add(product);
     }
 
     private void initProducts() {

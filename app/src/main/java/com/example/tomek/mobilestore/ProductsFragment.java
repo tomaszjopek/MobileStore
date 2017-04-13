@@ -40,24 +40,13 @@ public class ProductsFragment extends Fragment {
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.product_recycler);
         mLayoutManager = new LinearLayoutManager(getActivity());
 
-/*        int scrollPosition = 0;
-
-        // If a layout manager has already been set, get current scroll position.
-        if (mRecyclerView.getLayoutManager() != null) {
-            scrollPosition = ((LinearLayoutManager) mRecyclerView.getLayoutManager())
-                    .findFirstCompletelyVisibleItemPosition();
-        }*/
-
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(mLayoutManager);
-      /*  mRecyclerView.scrollToPosition(scrollPosition);*/
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
 
         mAdapter = new MyProductsAdapter(mProducts, getActivity());
 
         mRecyclerView.setAdapter(mAdapter);
-//
-//        mAdapter.setOnItemClickListener(mainActivity);
 
         return rootView;
     }

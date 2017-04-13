@@ -3,9 +3,16 @@
       xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/menu_basket"
         android:icon="@drawable/ic_shopping_basket"
         app:showAsAction="always"
         android:visible="true"
         android:title="@string/basket"/>
+<!--    <item
+        android:id="@+id/menu_basket_price"
+        app:showAsAction="always"
+        android:visible="true"
+        android:title="@string/price_text_menu"
+        android:actionViewClass="android.widget.TextView"/>-->
 
 </menu>

@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,22 +22,30 @@ import java.util.Locale;
 
 public class MyProductsAdapter extends RecyclerView.Adapter<MyProductsAdapter.ViewHolder> {
 
-    private List<Product> mDataSet;
-    private Context mContext;
+    private static List<Product> mDataSet;
+    private static Context mContext;
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public View view;
         public ImageView image;
         public TextView name;
         public TextView price;
+        public ImageButton basketBtn;
 
         public ViewHolder(View itemView) {
             super(itemView);
             image = (ImageView) itemView.findViewById(R.id.product_image);
             name = (TextView) itemView.findViewById(R.id.product_name);
             price = (TextView) itemView.findViewById(R.id.product_price);
+            basketBtn = (ImageButton) itemView.findViewById(R.id.addToBasket);
             view = itemView;
+            basketBtn.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            ((MainActivity)mContext).addToBasket(mDataSet.get(getLayoutPosition()));
         }
     }
 
