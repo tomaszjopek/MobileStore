@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,10 +21,10 @@ import java.util.List;
 
 class MyCategoriesAdapter extends RecyclerView.Adapter<MyCategoriesAdapter.ViewHolder> {
     private List<Category> mDataSet;
-    private final int FADE_DURATION = 500;
+    private static final int FADE_DURATION = 500;
+    private static RecylerViewOnItemClick mOnItemClickListener;
 
-
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView categoryName;
         public ImageView labelImage;
         public CardView cardView;
@@ -33,6 +34,12 @@ class MyCategoriesAdapter extends RecyclerView.Adapter<MyCategoriesAdapter.ViewH
             categoryName = (TextView) view.findViewById(R.id.category_name);
             labelImage = (ImageView) view.findViewById(R.id.category_label_image);
             cardView = (CardView) view.findViewById(R.id.category_cardView);
+            view.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            mOnItemClickListener.OnItemClick(v, getLayoutPosition());
         }
     }
 
@@ -66,6 +73,7 @@ class MyCategoriesAdapter extends RecyclerView.Adapter<MyCategoriesAdapter.ViewH
         return mDataSet.size();
     }
 
+
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
@@ -75,6 +83,10 @@ class MyCategoriesAdapter extends RecyclerView.Adapter<MyCategoriesAdapter.ViewH
         ScaleAnimation anim = new ScaleAnimation(0.0f, 1.0f, 0.0f, 1.0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         anim.setDuration(FADE_DURATION);
         view.startAnimation(anim);
+    }
+
+    public void setOnItemClickListener(RecylerViewOnItemClick listener) {
+        mOnItemClickListener = listener;
     }
 
 }

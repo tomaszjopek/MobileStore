@@ -10,22 +10,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.tomek.mobilestore.Model.Category;
+import com.example.tomek.mobilestore.Model.Product;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
-public class CategoryFragment extends Fragment {
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class ProductsFragment extends Fragment {
 
-    private final String TAG = "RecyclerView";
-
+    private static final String TAG = "ProductList";
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
-    private MyCategoriesAdapter mAdapter;
-    private MainActivity mainActivity;
+    private MyProductsAdapter mAdapter;
+    private List<Product> mProducts;
 
-    public CategoryFragment() {
+    public ProductsFragment() {
         // Required empty public constructor
     }
 
@@ -33,47 +34,39 @@ public class CategoryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.fragment_category, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_products, container, false);
         rootView.setTag(TAG);
 
-        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.categories_recycler);
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.product_recycler);
         mLayoutManager = new LinearLayoutManager(getActivity());
 
-        int scrollPosition = 0;
+/*        int scrollPosition = 0;
 
         // If a layout manager has already been set, get current scroll position.
         if (mRecyclerView.getLayoutManager() != null) {
             scrollPosition = ((LinearLayoutManager) mRecyclerView.getLayoutManager())
                     .findFirstCompletelyVisibleItemPosition();
-        }
+        }*/
 
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.scrollToPosition(scrollPosition);
+      /*  mRecyclerView.scrollToPosition(scrollPosition);*/
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
 
-        mAdapter = new MyCategoriesAdapter(init());
+        mAdapter = new MyProductsAdapter(mProducts);
 
         mRecyclerView.setAdapter(mAdapter);
-        mAdapter.setOnItemClickListener(mainActivity);
+//
+//        mAdapter.setOnItemClickListener(mainActivity);
 
         return rootView;
     }
 
-    public void setmContext(MainActivity mContext) {
-        this.mainActivity = mContext;
+    public List<Product> getmProducts() {
+        return mProducts;
     }
 
-    private List<Category> init() {
-        List<Category> list = new ArrayList<>();
-        list.add(new Category("Ksiazki", R.drawable.books));
-        list.add(new Category("AGD i RTV", R.drawable.rtvagd));
-        list.add(new Category("Elektronika", R.drawable.electronic));
-        list.add(new Category("Odziez", R.drawable.odziez));
-
-        return list;
+    public void setmProducts(List<Product> mProducts) {
+        this.mProducts = mProducts;
     }
-
 }
-
-
