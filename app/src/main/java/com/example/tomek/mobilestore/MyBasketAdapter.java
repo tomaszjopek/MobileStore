@@ -2,6 +2,7 @@ package com.example.tomek.mobilestore;
 
 import android.content.Context;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,15 +19,14 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * Created by Tomek on 2017-04-13.
+ * Created by Tomek on 2017-04-14.
  */
 
-public class MyProductsAdapter extends RecyclerView.Adapter<MyProductsAdapter.ViewHolder> {
-
+class MyBasketAdapter extends RecyclerView.Adapter<MyBasketAdapter.ViewHolder> {
     private static List<Product> mDataSet;
     private static Context mContext;
 
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public View view;
         public ImageView image;
@@ -39,33 +39,34 @@ public class MyProductsAdapter extends RecyclerView.Adapter<MyProductsAdapter.Vi
             image = (ImageView) itemView.findViewById(R.id.product_image);
             name = (TextView) itemView.findViewById(R.id.product_name);
             price = (TextView) itemView.findViewById(R.id.product_price);
-            basketBtn = (ImageButton) itemView.findViewById(R.id.addToBasket);
+            basketBtn = (ImageButton) itemView.findViewById(R.id.removeToBasket);
             view = itemView;
             basketBtn.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-            ((MainActivity)mContext).addToBasket(mDataSet.get(getLayoutPosition()));
-            Snackbar.make(view, "Dodano produkt do koszyka", Snackbar.LENGTH_LONG).show();
+            mDataSet.remove(getLayoutPosition());
+            notifyDataSetChanged();
+            Snackbar.make(view, "Usunięto produkt z koszyka", Snackbar.LENGTH_LONG).show();
         }
     }
 
-    public MyProductsAdapter(List<Product> mDataSet, Context mContext) {
+    public MyBasketAdapter(List<Product> mDataSet, Context mContext) {
         this.mDataSet = mDataSet;
         this.mContext = mContext;
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_recycler_item, parent, false);
+    public MyBasketAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.basket_item, parent, false);
 
-        ViewHolder viewHolder = new ViewHolder(view);
+        MyBasketAdapter.ViewHolder viewHolder = new MyBasketAdapter.ViewHolder(view);
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(MyBasketAdapter.ViewHolder holder, int position) {
         Product product = mDataSet.get(position);
 
         holder.image.setImageResource(product.getImageResource());
@@ -73,7 +74,6 @@ public class MyProductsAdapter extends RecyclerView.Adapter<MyProductsAdapter.Vi
         holder.price.setText(String.format(Locale.ENGLISH,"%.2f", product.getPrice()));
 
         startAnimation(holder.view, position);
-
     }
 
     @Override

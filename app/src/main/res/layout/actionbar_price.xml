@@ -8,7 +8,7 @@
         android:id="@+id/menu_price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="0.00 zl"
+        android:text="0.00 zł"
         android:textColor="@color/colorAccent"
         android:textSize="20sp"
         android:textStyle="bold"/>

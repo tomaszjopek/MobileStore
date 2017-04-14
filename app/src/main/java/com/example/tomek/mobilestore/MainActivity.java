@@ -3,6 +3,7 @@ package com.example.tomek.mobilestore;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.content.ContextCompat;
@@ -21,6 +22,7 @@ import com.example.tomek.mobilestore.Model.Product;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements RecylerViewOnItemClick {
@@ -33,6 +35,8 @@ public class MainActivity extends AppCompatActivity implements RecylerViewOnItem
     private List<Product> mBasket;
     private Map<String, List<Product>> shopDataSet;
     private ActionBar mActionBar;
+    private Handler mHandler;
+    private Runnable mThread;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements RecylerViewOnItem
         initProducts();
 
         mBasket = new ArrayList<>();
+        mHandler = new Handler();
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
@@ -86,7 +91,25 @@ public class MainActivity extends AppCompatActivity implements RecylerViewOnItem
         mActionBar.setDisplayShowCustomEnabled(true);
         mActionBar.setCustomView(R.layout.actionbar_price);
 
-        TextView price = (TextView) mActionBar.getCustomView().findViewById(R.id.menu_price);
+ //       TextView price = (TextView) mActionBar.getCustomView().findViewById(R.id.menu_price);
+
+        mThread = new Runnable() {
+            @Override
+            public void run() {
+                double price = 0;
+                for(Product tmp : mBasket) {
+                    price += tmp.getPrice();
+                }
+
+                ((TextView) mActionBar.getCustomView().findViewById(R.id.menu_price)).setText(String.format(Locale.ENGLISH,
+                        "%.2f zł", price));
+
+                mHandler.postDelayed(this, 500);
+            }
+        };
+
+        mHandler.postDelayed(mThread, 500);
+
 
     }
 
@@ -106,10 +129,10 @@ public class MainActivity extends AppCompatActivity implements RecylerViewOnItem
         else if(item.getItemId() == R.id.menu_basket) {
             mFragmentManager = getFragmentManager();
             mFragmentTransaction = mFragmentManager.beginTransaction();
-            ProductsFragment productsFragment = new ProductsFragment();
-            productsFragment.setmProducts(mBasket);
+            BasketFragment basketFragment = new BasketFragment();
+            basketFragment.setmProducts(mBasket);
 
-            mFragmentTransaction.replace(R.id.container, productsFragment);
+            mFragmentTransaction.replace(R.id.container, basketFragment);
             mFragmentTransaction.addToBackStack("BASKET");
             mFragmentTransaction.commit();
         }
@@ -134,6 +157,10 @@ public class MainActivity extends AppCompatActivity implements RecylerViewOnItem
 
     public void addToBasket(Product product) {
         mBasket.add(product);
+    }
+
+    public void removeFromBasket(Product product) {
+        mBasket.remove(product);
     }
 
     private void initProducts() {
@@ -166,5 +193,12 @@ public class MainActivity extends AppCompatActivity implements RecylerViewOnItem
         clothes.add(new Product(2, "Koszula", R.drawable.clothes_shirt, 59.00));
 
         shopDataSet.put("Odziez", clothes);
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        mHandler.removeCallbacks(mThread);
+        super.onDestroy();
     }
 }
