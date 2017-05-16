@@ -68,6 +68,7 @@ public class CategoryFragment extends Fragment {
         List<Category> list = new ArrayList<>();
         list.add(new Category("Ksiazki", R.drawable.books));
         list.add(new Category("AGD i RTV", R.drawable.rtvagd));
+        list.add(new Category("Muzyka", R.drawable.vinyls));
         list.add(new Category("Elektronika", R.drawable.electronic));
         list.add(new Category("Odziez", R.drawable.odziez));
 

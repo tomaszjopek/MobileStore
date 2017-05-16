@@ -193,6 +193,15 @@ public class MainActivity extends AppCompatActivity implements RecylerViewOnItem
         clothes.add(new Product(2, "Koszula", R.drawable.clothes_shirt, 59.00));
 
         shopDataSet.put("Odziez", clothes);
+
+        List<Product> albums = new ArrayList<>();
+        albums.add(new Product(1, "Ed Sheeran", R.drawable.album_sheeran, 99.90, R.raw.sheeran));
+        albums.add(new Product(2, "Depeche Mode", R.drawable.album_depeche, 119.99, R.raw.depeche));
+        albums.add(new Product(3, "Rolling Stones", R.drawable.albums_stones, 15.50, R.raw.stones));
+        albums.add(new Product(4, "Modern Talking", R.drawable.albums_modern, 10.99, R.raw.modern));
+        albums.add(new Product(5, "Dawid Podsiadło", R.drawable.albums_podsiadlo, 159.90, R.raw.podsiadlo));
+
+        shopDataSet.put("Muzyka", albums);
     }
 
 
