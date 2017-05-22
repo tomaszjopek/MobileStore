@@ -1,5 +1,8 @@
 package com.example.tomek.mobilestore;
 
+import android.app.Activity;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
@@ -42,6 +45,21 @@ class MyBasketAdapter extends RecyclerView.Adapter<MyBasketAdapter.ViewHolder> {
             basketBtn = (ImageButton) itemView.findViewById(R.id.removeToBasket);
             view = itemView;
             basketBtn.setOnClickListener(this);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    FragmentManager fragmentManager = ((Activity)mContext).getFragmentManager();
+                    FragmentTransaction ft = fragmentManager.beginTransaction();
+                    Details fragment = new Details();
+                    fragment.setProduct(mDataSet.get(getAdapterPosition()));
+                    fragment.setmContext(mContext);
+
+                    ft.replace(R.id.container, fragment);
+                    ft.addToBackStack("DETAIL");
+                    ft.commit();
+                }
+            });
         }
 
         @Override

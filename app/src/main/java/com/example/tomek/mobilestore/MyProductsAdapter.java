@@ -1,6 +1,10 @@
 package com.example.tomek.mobilestore;
 
+import android.app.Activity;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.support.design.widget.Snackbar;
@@ -31,7 +35,6 @@ public class MyProductsAdapter extends RecyclerView.Adapter<MyProductsAdapter.Vi
 
     private static List<Product> mDataSet;
     private static Context mContext;
-    private static boolean flag;
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
@@ -40,7 +43,6 @@ public class MyProductsAdapter extends RecyclerView.Adapter<MyProductsAdapter.Vi
         public TextView name;
         public TextView price;
         public ImageButton basketBtn;
-        public MyDetector detector;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -51,35 +53,21 @@ public class MyProductsAdapter extends RecyclerView.Adapter<MyProductsAdapter.Vi
             view = itemView;
             basketBtn.setOnClickListener(this);
 
-            itemView.setOnTouchListener(new View.OnTouchListener() {
-
+            itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public boolean onTouch(View v, MotionEvent event) {
+                public void onClick(View v) {
+                    FragmentManager fragmentManager = ((Activity)mContext).getFragmentManager();
+                    FragmentTransaction ft = fragmentManager.beginTransaction();
+                    Details fragment = new Details();
+                    fragment.setProduct(mDataSet.get(getAdapterPosition()));
+                    fragment.setmContext(mContext);
 
-                    if (event.getAction() == MotionEvent.ACTION_UP) {
-                        if (flag) {
-                            if (detector.player != null)
-                                detector.player.stop();
-                            flag = false;
-                        }
-
-
-                    } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-
-                        Product product = mDataSet.get(getAdapterPosition());
-                        detector = new MyDetector(product.getPathToSound(), mContext);
-                        if (product.getPathToSound() != -1) {
-                            detector.onLongPress(event);
-                        }
-
-                    } else if (event.getAction() == MotionEvent.ACTION_SCROLL) {
-                        detector.player.stop();
-                        flag = false;
-                    }
-
-                    return true;
+                    ft.replace(R.id.container, fragment);
+                    ft.addToBackStack("DETAIL");
+                    ft.commit();
                 }
             });
+
         }
 
         @Override
@@ -128,25 +116,6 @@ public class MyProductsAdapter extends RecyclerView.Adapter<MyProductsAdapter.Vi
             animation.setStartOffset(150 * position);
         }
         view.startAnimation(animation);
-    }
-
-
-    private static class MyDetector extends GestureDetector.SimpleOnGestureListener {
-        public int path;
-        public Context context;
-        public MediaPlayer player;
-
-        public MyDetector(int path, Context context) {
-            this.path = path;
-            this.context = context;
-        }
-
-        @Override
-        public void onLongPress(MotionEvent e) {
-            player = MediaPlayer.create(context, path);
-            player.start();
-            flag = true;
-        }
     }
 
 }
