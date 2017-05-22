@@ -62,6 +62,7 @@ public class MyProductsAdapter extends RecyclerView.Adapter<MyProductsAdapter.Vi
                     fragment.setProduct(mDataSet.get(getAdapterPosition()));
                     fragment.setmContext(mContext);
 
+                    ft.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
                     ft.replace(R.id.container, fragment);
                     ft.addToBackStack("DETAIL");
                     ft.commit();
